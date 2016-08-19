@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/FileNameLoad/FileNameLoad.iml" filepath="$PROJECT_DIR$/FileNameLoad/FileNameLoad.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FileNameLoad/FileNameLoad.iml" filepath="$PROJECT_DIR$/FileNameLoad/FileNameLoad.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FirstApp.iml" filepath="$PROJECT_DIR$/FirstApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chatapplication/chatapplication.iml" filepath="$PROJECT_DIR$/chatapplication/chatapplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/debugapplication/debugapplication.iml" filepath="$PROJECT_DIR$/debugapplication/debugapplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fileload/fileload.iml" filepath="$PROJECT_DIR$/fileload/fileload.iml" />
+    </modules>
+  </component>
+</project>
