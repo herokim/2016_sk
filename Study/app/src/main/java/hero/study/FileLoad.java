@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class FileLoad extends AppCompatActivity implements View.
     private Button button;
     private LinearLayout layout;
     private TextView textView;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +40,13 @@ public class FileLoad extends AppCompatActivity implements View.
         button = (Button)findViewById(R.id.button);
         layout = (LinearLayout)findViewById(R.id.linearLayout);
         textView = (TextView)findViewById(R.id.textView);
+        imageView = (ImageView) findViewById(R.id.imageView);
+
 
         textView.setText("Press a Button");
         button.setOnClickListener(this);
+
+
     }
 
 
