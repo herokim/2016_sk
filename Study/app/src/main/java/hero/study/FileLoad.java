@@ -29,12 +29,28 @@ import java.util.jar.Manifest;
 public class FileLoad extends AppCompatActivity implements View.
         OnClickListener{
 
+    private static final int Gallery_Image_Request = 1;
     private Button button;
     private TextView textView;
     private ImageView imageView;
     private LinearLayout linearLayout;
 
-    private static final int Gallery_Image_Request = 1;
+    public FileLoad() throws IOException {
+
+        String Path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                File.separator + "DCIM" + File.separator + "Camera";
+
+
+        File dir = new File(Path);
+
+        File[] files = dir.listFiles(new imageFilter());
+        for (File f : files)
+        {
+            textView.setText(f.getCanonicalPath());
+
+        }
+
+            }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +70,6 @@ public class FileLoad extends AppCompatActivity implements View.
 
     }
 
-
     @Override
     public void onClick(View v) {
         if(v.equals(button)){
@@ -64,56 +79,15 @@ public class FileLoad extends AppCompatActivity implements View.
                     Gallery_Image_Request,
                     android.Manifest.permission.READ_EXTERNAL_STORAGE)){
 
-                String Path = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                        File.separator + "DCIM" + File.separator + "Camera";
-
-            File list = new File(Path);
-
-
-            FilenameFilter imageFilter = new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String filename) {
-
-                    if(filename.toLowerCase().endsWith(".png")){
-                        return true ;
-                    } else if(filename.toLowerCase().endsWith(".jpg")){
-                        return true;
-                    } else if(filename.toLowerCase().endsWith(".jpeg")){
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            };
 
                 textView.setText("Loading...");
+                try {
+                    new FileLoad();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Toast.makeText(this,"Please Wait....",Toast.LENGTH_LONG).show();
 
-                File[] files = list.listFiles(imageFilter);
-                for(File file : files){
-                    if(file.isDirectory()){
-                        textView.setText("Directory : ");
-                    } else {
-                        textView.setText("      File : ");
-                    }
-                    try {
-                        textView.append(file.getCanonicalPath());
-                        FileFilter fileFilter = new FileFilter() {
-                            @Override
-                            public boolean accept(File pathname) {
-                                try {
-                                    pathname.getCanonicalFile();
-                                    imageView.setImageBitmap((Bitmap) pathname.getCanonicalFile());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-                    } catch (IOException e){
-                        e.printStackTrace();
-                    }
-
-                }
             }
 
 
