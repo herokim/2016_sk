@@ -81,7 +81,7 @@ public class FileLoad extends AppCompatActivity implements View.
 
                 File[] files = gallery.listFiles(filenameFilter);
 
-
+// update
                 String temp = "";
 
                 textView.setText("Loading...");
