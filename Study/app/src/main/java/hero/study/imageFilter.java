@@ -9,9 +9,6 @@ import java.io.FilenameFilter;
  */
 public class imageFilter implements FilenameFilter {
 
-    public final String[] okFileExtensions =
-            new String[] {"jpg", "jpeg", "png"};
-
     @Override
     public boolean accept(File dir, String filename) {
         String lowerName = filename.toLowerCase();
