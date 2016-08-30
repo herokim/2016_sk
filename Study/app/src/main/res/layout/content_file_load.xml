@@ -19,7 +19,9 @@
         android:text="Run"
         android:id="@+id/button"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:paddingStart="100dp"
+        android:paddingEnd="100dp" />
 
     <ScrollView
         android:layout_width="wrap_content"
@@ -29,7 +31,8 @@
         android:weightSum="1"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/button">
+        android:layout_below="@+id/button"
+        android:id="@+id/scrollView">
 
     <LinearLayout
         android:orientation="horizontal"

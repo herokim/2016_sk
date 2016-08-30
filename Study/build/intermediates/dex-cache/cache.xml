@@ -2,13 +2,6 @@
 <items version="2" >
 
     <item
-        jar="/Users/admin/Desktop/2016_sk/Study/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
-        <dex dex="/Users/admin/Desktop/2016_sk/Study/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.4.0_f7680e55aea3f9c5b046230a5e065a928b60632f/classes.dex" />
-    </item>
-    <item
         jar="/Users/admin/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
         jumboMode="true"
         revision="23.0.3"
@@ -16,17 +9,24 @@
         <dex dex="/Users/admin/Desktop/2016_sk/Study/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.4.0_2916f05509b27bdd4a9011448d1befa7add8e924/classes.dex" />
     </item>
     <item
+        jar="/Users/admin/Desktop/2016_sk/Study/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/Users/admin/Desktop/2016_sk/Study/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.4.0_f7680e55aea3f9c5b046230a5e065a928b60632f/classes.dex" />
+    </item>
+    <item
         jar="/Users/admin/Desktop/2016_sk/Study/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="f9d4d8731a085696316a1587f34f9c774649e6d5">
+        sha1="5b8cc9610ffcc072873facec3e03a8f37a04058f">
         <dex dex="/Users/admin/Desktop/2016_sk/Study/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_5bde0760c4d315f754c2242d8a9697329e87d7e7/classes.dex" />
     </item>
     <item
         jar="/Users/admin/Desktop/2016_sk/Study/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="a68c9cdb7dc22f53a6a8183c337bf0e3ea849295">
+        sha1="2c810b85ab3512edaf4d36b99fa961f287fb5507">
         <dex dex="/Users/admin/Desktop/2016_sk/Study/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8c9b16bdcd3f5d4bb750111496fb088a80082ae4/classes.dex" />
     </item>
     <item

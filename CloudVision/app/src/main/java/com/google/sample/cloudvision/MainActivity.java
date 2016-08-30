@@ -16,6 +16,7 @@
 
 package com.google.sample.cloudvision;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,6 +26,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,19 +47,20 @@ import com.google.api.services.vision.v1.model.Image;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String CLOUD_VISION_API_KEY_FOR_ANDROID = "AIzaSyBn9K0Zb6MhXimFoqufOFJbbQdykuzdiuw";
     public static final String FILE_NAME = "temp.jpg";
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GALLERY_IMAGE_REQUEST = 1;
-    public static final int CAMERA_PERMISSIONS_REQUEST = 2;
-    public static final int CAMERA_IMAGE_REQUEST = 3;
 
     private TextView mImageDetails;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        button = (Button) findViewById(R.id.button2)
         mImageDetails = (TextView) findViewById(R.id.image_details);
+
+        button.setOnClickListener(this);
     }
 
     public void startGalleryChooser() {
@@ -91,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (PermissionUtils.permissionGranted(
                 requestCode,
-                CAMERA_PERMISSIONS_REQUEST,
+                GALLERY_IMAGE_REQUEST,
                 grantResults)) {
 
         }
@@ -225,5 +233,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return message;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.equals(button)){
+
+            if(PermissionUtils.requestPermission(
+                    this,
+                    GALLERY_IMAGE_REQUEST,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)){
+                Toast.makeText(this, "Please Wait...",Toast.LENGTH_LONG).show();
+            }
+
+        }
     }
 }
