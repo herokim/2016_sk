@@ -16,12 +16,12 @@
 
 package com.google.sample.cloudvision;
 
-import android.Manifest;
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -46,8 +46,9 @@ import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,12 +71,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
 
 
-        button = (Button) findViewById(R.id.button2)
+        button = (Button) findViewById(R.id.button2);
         mImageDetails = (TextView) findViewById(R.id.image_details);
 
         button.setOnClickListener(this);
     }
-
+/*
     public void startGalleryChooser() {
 
         Intent intent = new Intent();
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivityForResult(Intent.createChooser(intent, "Select a photo"),
                 GALLERY_IMAGE_REQUEST);
     }
+  */
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -91,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             uploadImage(data.getData());
         }
-    }
-
+    }*/
+/*
     @Override
     public void onRequestPermissionsResult(
             int requestCode, String[] permissions, int[] grantResults) {
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 grantResults)) {
 
         }
-    }
+    }*/
 
     public void uploadImage(Uri uri) {
         if (uri != null) {
@@ -199,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }.execute();
     }
 
+
     public Bitmap scaleBitmapDown(Bitmap bitmap, int maxDimension) {
 
         int originalWidth = bitmap.getWidth();
@@ -220,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String convertResponseToString(BatchAnnotateImagesResponse response) {
-        String message = "I found these things:\n\n";
+        String message = "I found those things:\n\n";
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
         if (labels != null) {
@@ -242,10 +246,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(PermissionUtils.requestPermission(
                     this,
                     GALLERY_IMAGE_REQUEST,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)){
-                Toast.makeText(this, "Please Wait...",Toast.LENGTH_LONG).show();
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE)){
+
+                String Path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        File.separator + "DCIM" + File.separator + "Camera";
+
+                File gallery = new File(Path);
+
+
+                FilenameFilter filenameFilter = new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String filename) {
+                        String lowerCase = filename.toLowerCase();
+
+                        if(lowerCase.endsWith("jpg")){
+                            return true;
+                        }else if(lowerCase.endsWith("png")){
+                            return true;
+                        }else if(lowerCase.endsWith("jpeg")){
+                            return true;
+                        }else {
+                            return false;
+                        }
+                    }
+                };
+
+                File[] files = gallery.listFiles(filenameFilter);
+// update
+                String temp = "";
+                String finalPath = "";
+
+                mImageDetails.setText("Loading...");
+                Toast.makeText(this,"Please Wait....",Toast.LENGTH_LONG).show();
+
+                for(File f : files){
+
+                    try {
+
+                        temp = temp + "\n" +  f.getCanonicalPath();
+                        finalPath = f.getCanonicalPath();
+
+                    } catch (IOException e) {
+
+                        e.printStackTrace();
+
+                    }
+                }
+
+
+                //    imageView.setImageBitmap(BitmapFactory.decodeFile(finalPath));
+                mImageDetails.setText(temp);
+                try {
+                    callCloudVision(BitmapFactory.decodeFile(finalPath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
+
 
         }
     }
-}
+    }
+

@@ -1,14 +1,11 @@
 package hero.study;
 
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-
 import java.io.FilenameFilter;
 import java.io.IOException;
 
@@ -80,32 +76,33 @@ public class FileLoad extends AppCompatActivity implements View.
                 };
 
                 File[] files = gallery.listFiles(filenameFilter);
+                String[] imageFiles;
 
 // update
                 String temp = "";
+                String finalPath = "";
+                int countImage = 0;
 
                 textView.setText("Loading...");
 
                 Toast.makeText(this,"Please Wait....",Toast.LENGTH_LONG).show();
 
                 for(File f : files){
-                    if(f.isDirectory()){
-                        textView.setText("Directory : ");
-                    }else{
-                        textView.setText("Files : ");
-                    }
+
                     try {
 
                         textView.setText(f.getCanonicalPath());
-                        temp = f.getCanonicalPath();
-
+                        temp = temp + "\n" +  f.getCanonicalPath();
+                        finalPath = f.getCanonicalPath();
+                        countImage++;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
 
-                imageView.setImageBitmap(BitmapFactory.decodeFile(temp));
 
+            //    imageView.setImageBitmap(BitmapFactory.decodeFile(finalPath));
+                textView.setText(temp);
             }
 
 
