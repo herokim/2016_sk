@@ -145,8 +145,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Vision.Builder builder = new Vision.Builder(httpTransport, jsonFactory, null);
                     builder.setVisionRequestInitializer(new
                             VisionRequestInitializer(CLOUD_VISION_API_KEY_FOR_ANDROID));
-                 //   builder.setVisionRequestInitializer(new2
-                   //         VisionRequestInitializer(CLOUD_VISION_API_Key_FOR_WEB));
+                    //   builder.setVisionRequestInitializer(new2
+                    //         VisionRequestInitializer(CLOUD_VISION_API_Key_FOR_WEB));
                     Vision vision = builder.build();
 
                     BatchAnnotateImagesRequest batchAnnotateImagesRequest =
@@ -241,71 +241,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v.equals(button)){
+        if (v.equals(button)) {
 
-            if(PermissionUtils.requestPermission(
+            if (PermissionUtils.requestPermission(
                     this,
                     GALLERY_IMAGE_REQUEST,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE)){
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
-                String Path = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                        File.separator + "DCIM" + File.separator + "Camera";
-
-                File gallery = new File(Path);
-
-
-                FilenameFilter filenameFilter = new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String filename) {
-                        String lowerCase = filename.toLowerCase();
-
-                        if(lowerCase.endsWith("jpg")){
-                            return true;
-                        }else if(lowerCase.endsWith("png")){
-                            return true;
-                        }else if(lowerCase.endsWith("jpeg")){
-                            return true;
-                        }else {
-                            return false;
-                        }
-                    }
-                };
-
-                File[] files = gallery.listFiles(filenameFilter);
-// update
-                String temp = "";
-                String finalPath = "";
 
                 mImageDetails.setText("Loading...");
-                Toast.makeText(this,"Please Wait....",Toast.LENGTH_LONG).show();
-
-                for(File f : files){
-
-                    try {
-
-                        temp = temp + "\n" +  f.getCanonicalPath();
-                        finalPath = f.getCanonicalPath();
-
-                    } catch (IOException e) {
-
-                        e.printStackTrace();
-
-                    }
-                }
+                Toast.makeText(this, "Please Wait....", Toast.LENGTH_LONG).show();
 
 
-                //    imageView.setImageBitmap(BitmapFactory.decodeFile(finalPath));
-                mImageDetails.setText(temp);
-                try {
-                    callCloudVision(BitmapFactory.decodeFile(finalPath));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
-
-
-
         }
     }
+
+    public String extractingImage() {
+
+        String Path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                File.separator + "DCIM" + File.separator + "Camera";
+
+
+        String temp = "";
+        String finalPath = "";
+
+
+        File gallery = new File(Path);
+
+
+        FilenameFilter filenameFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                String lowerCase = filename.toLowerCase();
+
+                if (lowerCase.endsWith("jpg")) {
+                    return true;
+                } else if (lowerCase.endsWith("png")) {
+                    return true;
+                } else if (lowerCase.endsWith("jpeg")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+
+        File[] files = gallery.listFiles(filenameFilter);
+
+
+        for (File f : files) {
+
+            try {
+
+                temp = temp + "\n" + f.getCanonicalPath();
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+            }
+        }
+
+        return temp;
+
+
     }
+}
+
+
+
 
