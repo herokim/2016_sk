@@ -18,11 +18,9 @@ package com.google.sample.cloudvision;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -54,9 +52,9 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String CLOUD_VISION_API_KEY_FOR_ANDROID = "AIzaSyBn9K0Zb6MhXimFoqufOFJbbQdykuzdiuw";
-    public static final String FILE_NAME = "temp.jpg";
 
+    public static final String FILE_NAME = "temp.jpg";
+    private static final String CLOUD_VISION_API_KEY_FOR_ANDROID = "AIzaSyBn9K0Zb6MhXimFoqufOFJbbQdykuzdiuw";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GALLERY_IMAGE_REQUEST = 1;
 
@@ -108,14 +106,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }*/
 
-    public void uploadImage(Uri uri) {
-        if (uri != null) {
+    public void uploadImage(Bitmap extractedFiles) {
+        if (extractedFiles != null) {
             try {
                 // scale the image to save on bandwidth
                 Bitmap bitmap =
-                        scaleBitmapDown(
-                                MediaStore.Images.Media.getBitmap(getContentResolver(), uri),
-                                1200);
+                        scaleBitmapDown(extractedFiles, 1200);
 
                 callCloudVision(bitmap);
 
@@ -224,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String convertResponseToString(BatchAnnotateImagesResponse response) {
-        String message = "I found those things:\n\n";
+        String message = "";
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
         if (labels != null) {
@@ -251,20 +247,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 mImageDetails.setText("Loading...");
                 Toast.makeText(this, "Please Wait....", Toast.LENGTH_LONG).show();
-
+                extractingImage();
 
             }
         }
     }
 
-    public String extractingImage() {
+    public void extractingImage() {
 
         String Path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                 File.separator + "DCIM" + File.separator + "Camera";
 
 
         String temp = "";
-        String finalPath = "";
+//        String finalPath = "";
 
 
         File gallery = new File(Path);
@@ -303,10 +299,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        return temp;
-
+        DecodingPath(temp);
 
     }
+
+    public void DecodingPath(String s) {
+
+        String[] ImageArray = s.split("\n");
+
+        for (int i = 0; i <= ImageArray.length; i++) {
+
+            uploadImage(BitmapFactory.decodeFile(ImageArray[i]));
+
+        }
+    }
+
 }
 
 
