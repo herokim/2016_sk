@@ -53,13 +53,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static final String FILE_NAME = "temp.jpg";
+    //public static final String FILE_NAME = "temp.jpg";
     private static final String CLOUD_VISION_API_KEY_FOR_ANDROID = "AIzaSyBn9K0Zb6MhXimFoqufOFJbbQdykuzdiuw";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GALLERY_IMAGE_REQUEST = 1;
 
     private TextView mImageDetails;
-    private Button button;
+    private Button button1;
+    private Button button2;
+
+    public String Result = new String("");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +71,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        button = (Button) findViewById(R.id.button2);
+        button1 = (Button) findViewById(R.id.button1);
+        button2 = (Button) findViewById(R.id.button2);
         mImageDetails = (TextView) findViewById(R.id.image_details);
 
-        button.setOnClickListener(this);
+        button1.setOnClickListener(this);
+        button2.setOnClickListener(this);
     }
 /*
     public void startGalleryChooser() {
@@ -193,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             protected void onPostExecute(String result) {
-                mImageDetails.setText(result);
+                Result = Result + result;
             }
         }.execute();
     }
@@ -237,7 +241,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (v.equals(button)) {
+        if (v.getId() == R.id.button1) {
+
+            Toast.makeText(this, "Please Wait....", Toast.LENGTH_LONG).show();
 
             if (PermissionUtils.requestPermission(
                     this,
@@ -246,14 +252,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 mImageDetails.setText("Loading...");
-                Toast.makeText(this, "Please Wait....", Toast.LENGTH_LONG).show();
-                extractingImage();
+                try {
+                    extractingImage();
+                } catch (IOException e) {
 
+                    mImageDetails.setText("Error!");
+
+                    e.printStackTrace();
+                }
+                Toast.makeText(this,"Done",Toast.LENGTH_LONG).show();
             }
+
+        } else if(v.getId() == R.id.button2){
+
+            mImageDetails.setText(Result);
+
         }
     }
 
-    public void extractingImage() {
+    public void extractingImage() throws IOException {
 
         String Path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                 File.separator + "DCIM" + File.separator + "Camera";
@@ -288,28 +305,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         for (File f : files) {
 
-            try {
+            DecodingPath(f.getCanonicalPath());
+            //temp = temp + f.getCanonicalPath() + "\n";
 
-                temp = temp + "\n" + f.getCanonicalPath();
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            }
         }
-
-        DecodingPath(temp);
+//     DecodingPath(temp);
 
     }
 
     public void DecodingPath(String s) {
 
-        String[] ImageArray = s.split("\n");
+        uploadImage(BitmapFactory.decodeFile(s));
 
-        for (int i = 0; i <= ImageArray.length; i++) {
-
-            uploadImage(BitmapFactory.decodeFile(ImageArray[i]));
+     //   String[] ImageArray = s.split("\n");
+        
+     //for (int i = 0; i <= ImageArray.length; i++) {
+       //  mImageDetails.setText(ImageArray[i]);
+//            uploadImage(BitmapFactory.decodeFile(ImageArray[i]));
 
         }
     }
