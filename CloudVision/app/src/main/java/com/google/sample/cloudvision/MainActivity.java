@@ -26,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,11 +59,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GALLERY_IMAGE_REQUEST = 1;
 
+    private ImageView mImageView;
     private TextView mImageDetails;
     private Button button1;
     private Button button2;
 
-    public String Result = new String("");
+    public String Result = "";
+    public String finalPath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
         mImageDetails = (TextView) findViewById(R.id.image_details);
+        mImageView = (ImageView) findViewById(R.id.imageView);
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
@@ -115,12 +119,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 // scale the image to save on bandwidth
                 Bitmap bitmap =
-                        scaleBitmapDown(extractedFiles, 1200);
+                        scaleBitmapDown(extractedFiles, 600);
 
                 callCloudVision(bitmap);
-
             } catch (IOException e) {
-                Log.d(TAG, "Image picking failed because " + e.getMessage());
+     //           Log.d(TAG, "Image picking failed because " + e.getMessage());
                 Toast.makeText(this, R.string.image_picker_error, Toast.LENGTH_LONG).show();
             }
         } else {
@@ -197,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             protected void onPostExecute(String result) {
-                Result = Result + result;
+                Result += result;
             }
         }.execute();
     }
@@ -251,19 +254,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
 
-                mImageDetails.setText("Loading...");
+            //    mImageDetails.setText("Loading...");
                 try {
                     extractingImage();
                 } catch (IOException e) {
 
-                    mImageDetails.setText("Error!");
+              //      mImageDetails.setText("Error!");
 
                     e.printStackTrace();
                 }
-                Toast.makeText(this,"Done",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
             }
 
-        } else if(v.getId() == R.id.button2){
+        } else if (v.getId() == R.id.button2) {
 
             mImageDetails.setText(Result);
 
@@ -305,28 +308,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         for (File f : files) {
 
-            DecodingPath(f.getCanonicalPath());
-            //temp = temp + f.getCanonicalPath() + "\n";
+            finalPath = f.getCanonicalPath();
+            //DecodingPath(f.getCanonicalPath());
+            temp = temp + f.getCanonicalPath() + "\n";
 
         }
-//     DecodingPath(temp);
+        //DecodingPath(finalPath);
+        DecodingPath(temp);
+        mImageView.setImageBitmap(scaleBitmapDown(BitmapFactory.decodeFile(finalPath),1200));
 
     }
 
     public void DecodingPath(String s) {
 
-        uploadImage(BitmapFactory.decodeFile(s));
+        //     uploadImage(BitmapFactory.decodeFile(s));
 
-     //   String[] ImageArray = s.split("\n");
-        
-     //for (int i = 0; i <= ImageArray.length; i++) {
-       //  mImageDetails.setText(ImageArray[i]);
-//            uploadImage(BitmapFactory.decodeFile(ImageArray[i]));
+        String[] ImageArray = s.split("\n");
+
+        mImageDetails.setText("Proceeding....");
+
+        mImageDetails.setText(ImageArray[0]);
+
+
+        for ( String call : ImageArray) {
+                mImageDetails.setText(call);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(call);
+            uploadImage(bitmap);
+    //        bitmap.recycle();
 
         }
+
     }
 
 }
+
+
 
 
 

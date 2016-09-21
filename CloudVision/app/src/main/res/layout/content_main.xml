@@ -51,12 +51,13 @@
                 android:layout_marginBottom="8dp"
                 android:text="Use the floating action button to select an image."/>
 
-<<<<<<< Updated upstream
-          </LinearLayout>
-=======
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView" />
 
         </LinearLayout>
->>>>>>> Stashed changes
+
     </ScrollView>
 
 </RelativeLayout>
