@@ -59,16 +59,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GALLERY_IMAGE_REQUEST = 1;
 
-    private ImageView mImageView;
     private TextView mImageDetails;
     private Button button1;
     private Button button2;
 
-    public String Result = "";
-    public String finalPath = "";
+    public String Result;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -76,12 +76,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
+
         mImageDetails = (TextView) findViewById(R.id.image_details);
-        mImageView = (ImageView) findViewById(R.id.imageView);
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
+
     }
+
 /*
     public void startGalleryChooser() {
 
@@ -122,19 +124,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         scaleBitmapDown(extractedFiles, 600);
 
                 callCloudVision(bitmap);
+
             } catch (IOException e) {
-     //           Log.d(TAG, "Image picking failed because " + e.getMessage());
+                Log.d(TAG, "Image picking failed because " + e.getMessage());
                 Toast.makeText(this, R.string.image_picker_error, Toast.LENGTH_LONG).show();
             }
         } else {
             Log.d(TAG, "Image picker gave us a null image.");
             Toast.makeText(this, R.string.image_picker_error, Toast.LENGTH_LONG).show();
         }
+
     }
 
     private void callCloudVision(final Bitmap bitmap) throws IOException {
         // Switch text to loading
-        mImageDetails.setText(R.string.loading_message);
+        //mImageDetails.setText(R.string.loading_message);
 
         // Do the real work in an async task, because we need to use the network anyway
         new AsyncTask<Object, Void, String>() {
@@ -202,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             protected void onPostExecute(String result) {
                 Result += result;
             }
+
         }.execute();
     }
 
@@ -246,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == R.id.button1) {
 
+            Result = "";
             Toast.makeText(this, "Please Wait....", Toast.LENGTH_LONG).show();
 
             if (PermissionUtils.requestPermission(
@@ -254,12 +260,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
 
-            //    mImageDetails.setText("Loading...");
+                mImageDetails.setText("Loading...");
                 try {
                     extractingImage();
                 } catch (IOException e) {
 
-              //      mImageDetails.setText("Error!");
+                    mImageDetails.setText("Error!");
 
                     e.printStackTrace();
                 }
@@ -278,15 +284,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String Path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                 File.separator + "DCIM" + File.separator + "Camera";
 
-
         String temp = "";
-//        String finalPath = "";
-
 
         File gallery = new File(Path);
 
-
         FilenameFilter filenameFilter = new FilenameFilter() {
+
             @Override
             public boolean accept(File dir, String filename) {
                 String lowerCase = filename.toLowerCase();
@@ -308,43 +311,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         for (File f : files) {
 
-            finalPath = f.getCanonicalPath();
-            //DecodingPath(f.getCanonicalPath());
             temp = temp + f.getCanonicalPath() + "\n";
 
         }
-        //DecodingPath(finalPath);
+
         DecodingPath(temp);
-        mImageView.setImageBitmap(scaleBitmapDown(BitmapFactory.decodeFile(finalPath),1200));
 
     }
 
     public void DecodingPath(String s) {
 
-        //     uploadImage(BitmapFactory.decodeFile(s));
-
         String[] ImageArray = s.split("\n");
 
-        mImageDetails.setText("Proceeding....");
+        int i = 1;
 
-        mImageDetails.setText(ImageArray[0]);
+        for (String call : ImageArray) {
 
-
-        for ( String call : ImageArray) {
-                mImageDetails.setText(call);
-
+            mImageDetails.setText(call + "\t" + i);
+            i ++;
             Bitmap bitmap = BitmapFactory.decodeFile(call);
             uploadImage(bitmap);
-    //        bitmap.recycle();
 
         }
 
     }
 
 }
-
-
-
-
-
-
