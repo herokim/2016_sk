@@ -48,6 +48,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String CLOUD_VISION_API_KEY_FOR_ANDROID = "AIzaSyBn9K0Zb6MhXimFoqufOFJbbQdykuzdiuw";
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GALLERY_IMAGE_REQUEST = 1;
+    int count = 0;
+
 
     private TextView mImageDetails;
     private Button button1;
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 // scale the image to save on bandwidth
                 Bitmap bitmap =
-                        scaleBitmapDown(extractedFiles, 600);
+                        scaleBitmapDown(extractedFiles, 1200);
 
                 callCloudVision(bitmap);
 
@@ -231,17 +234,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, false);
     }
 
-    private String convertResponseToString(BatchAnnotateImagesResponse response) {
+//    private String convertResponseToString(BatchAnnotateImagesResponse response) {
+//    private ArrayList<String> convertResponseToString(BatchAnnotateImagesResponse response) {
+private String convertResponseToString(BatchAnnotateImagesResponse response) {
         String message = "";
+
+        //ArrayList<String> message = new ArrayList<>();
+        //List message = new ArrayList<String>();
 
         List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
         if (labels != null) {
             for (EntityAnnotation label : labels) {
-                message += String.format("%.3f: %s", label.getScore(), label.getDescription());
-                message += "\n";
+
+                message += String.format("%s\n",label.getDescription());
+
+                //message.add(String.format("%s",label.getDescription()));
+
+                //message.add(label.getDescription());
+
+
             }
         } else {
-            message += "nothing";
+            message += "nothing\n";
+            //message.add("nothing");
+
         }
 
         return message;
@@ -273,8 +289,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         } else if (v.getId() == R.id.button2) {
+            String[] temp = Result.split("\n");
 
-            mImageDetails.setText(Result);
+            ArrayList<String> itemList = new ArrayList<String>();
+
+            ArrayList<Integer> cntList = new ArrayList<Integer>();
+
+            for(int index = 0; index< temp.length ; index++){
+
+                int count = 1;
+
+                //반복문을 돌면서 itemList에 등록되었느지 확인
+                if(!itemList.contains(temp[index])){
+                    itemList.add(temp[index]);
+                    Log.i("tag", "running333");
+                    // item 이 몇 개인지 카운트
+
+                    for(int cntItem = index + 1; cntItem < temp.length ; cntItem ++){
+                        if(temp[index].equals(temp[cntItem])){
+                            count+=1;
+                            Log.i("tag", "running");
+                        }
+                    }
+
+                    cntList.add(count);
+
+                }else{
+                    continue;
+                }
+
+            }
+
+            //cnt를 비교하여 itemList, cntList 정렬
+            for(int sourceIndex = 0 ; sourceIndex <cntList.size()-1;sourceIndex++){
+                for(int targetIndex = sourceIndex+1;targetIndex < cntList.size()-1;targetIndex++){
+                    if(cntList.get(sourceIndex) < cntList.get(targetIndex)){
+                        int moveCnt = 0;
+                        String moveItem = "";
+
+                        //cntList 이동
+                        moveCnt = cntList.get(targetIndex);
+                        cntList.set(targetIndex,cntList.get(sourceIndex));
+                        cntList.set(sourceIndex,moveCnt);
+
+                        //itemList 이동
+                        moveItem = itemList.get(targetIndex);
+                        itemList.set(targetIndex,itemList.get(sourceIndex));
+                        itemList.set(sourceIndex,moveItem);
+                    }
+                }
+            }
+
+            // end 데이터 유형 및 개수를 설정
+
+            // 데이터 유형별로 중복개수와 함께 출력
+
+            String finalResult = "";
+
+            for(int index =0; index < itemList.size() ; index++){
+                finalResult += itemList.get(index) + " - " + cntList.get(index) + "\n";
+            }
+
+            mImageDetails.setText(finalResult);
 
         }
     }
@@ -312,6 +388,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (File f : files) {
 
             temp = temp + f.getCanonicalPath() + "\n";
+            this.count ++;
 
         }
 
@@ -325,6 +402,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int i = 1;
 
+        for(String name : ImageArray){
+            Bitmap bitmap = BitmapFactory.decodeFile(name);
+            uploadImage(bitmap);
+        }
+
+        /*
         for (String call : ImageArray) {
 
             mImageDetails.setText(call + "\t" + i);
@@ -332,7 +415,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bitmap bitmap = BitmapFactory.decodeFile(call);
             uploadImage(bitmap);
 
-        }
+
+        }*/
 
     }
 
